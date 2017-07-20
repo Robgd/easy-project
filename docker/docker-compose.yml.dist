@@ -1,0 +1,46 @@
+application:
+    build: ./application
+    container_name: project_application
+    volumes:
+        - {{PROJECT_PATH}}:/var/www
+    tty: true
+manager:
+    build: ./manager
+    container_name: manager
+    volumes_from:
+        - application
+    ports:
+        - 8081:8081
+    links:
+        - db:db
+db:
+    build: ./mariadb
+    container_name: mariadb
+    env_file:
+        - ./env/mysql.env
+    volumes:
+        - {{DOCKER_PATH}}/mysql/data:/var/lib/mysql:rw
+    ports:
+        - 3306:3306
+php:
+    build: ./php7
+    container_name: php
+    volumes_from:
+        - application
+    ports:
+        - 9000:9000
+        - 9001:9001
+    links:
+        - db:db
+nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+        - 80:80
+    volumes_from:
+        - application
+    volumes:
+        - {{DOCKER_PATH}}/logs/nginx:/var/log/nginx
+    links:
+        - db:db
+        - php:php
