@@ -57,16 +57,15 @@ case "$FRAMEWORK" in
         ;;
 esac
 
-installSymfony()
-{
-
-
-}
-
 # @info:    do nginx configuration
 # @args:    project name
 nginxConfig()
 {
-    docker cp ./docker/nginx/sites-available/nginx-project-config nginx:/etc/nginx/site-enabled/${PROJECT_NAME}
+    docker cp ./docker/nginx/sites-available/nginx-$1-config nginx:/etc/nginx/site-enabled/${PROJECT_NAME}
     docker exec -t -i nginx sed -i -e "s#{{DOCKER_PATH}}#$EASY_PROJECT_DOCKER_PATH#g" docker/docker-compose.yml
+}
+
+installSymfony()
+{
+    nginxConfig "symfony"
 }

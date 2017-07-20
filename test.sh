@@ -25,4 +25,9 @@
 
 source ./color.sh
 
+nginxConfig()
+{
+    echo $1
+}
 
+nginxConfig "symfony"
