@@ -6,17 +6,17 @@ services:
         volumes:
             - /Users/robingodart/www:/var/www
         tty: true
-    manager:
-        build: ./manager
-        container_name: manager
-        volumes_from:
-            - application
-        ports:
-            - 8081:8081
-        links:
-            - db:db
+#    manager:
+#        build: ./manager
+#        container_name: manager
+#        volumes_from:
+#            - application
+#        ports:
+#            - 8081:8081
+#        links:
+#            - db:db
     db:
-        image: mysql/mysql-server
+        image: mysql
         container_name: mysql
         env_file:
             - ./env/mysql.env
@@ -43,6 +43,8 @@ services:
             - application
         volumes:
             - /Users/robingodart/docker/logs/nginx:/var/log/nginx
+        depends_on:
+            - php
         links:
             - db:db
             - php:php

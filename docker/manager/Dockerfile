@@ -2,6 +2,7 @@ FROM ubuntu:latest
 MAINTAINER Robin Godart <godartrobin@gmail.com>
 
 RUN apt-get update && apt-get install -y \
+    curl \
     php7.0-cli \
     php7.0-json \
     php7.0-intl \
@@ -23,17 +24,12 @@ RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
 COPY ./conf.d/30-robgd.ini /etc/php7.0/cli/conf.d/30-robgd.ini
-COPY ./run.sh /home/docker/run.sh
-
-RUN chown docker:docker /home/docker/run.sh \
-    && chmod +x /home/docker/*.sh
-
-USER docker
-ENV HOME /home/docker
+COPY ./run.sh /root/run.sh
+RUN chmod 775 /root/*.sh
 
 WORKDIR /var/www/robgd
 
 # Define default command.
-CMD ["/home/docker/run.sh"]
+CMD ["/root/run.sh"]
 
 EXPOSE 8081
