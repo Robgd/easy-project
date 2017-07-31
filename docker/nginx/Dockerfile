@@ -10,8 +10,6 @@ COPY ./nginx.conf /etc/nginx/
 COPY ./sites-available/phpmyadmin /etc/nginx/sites-available/phpmyadmin
 
 COPY ./config.inc.php /etc/phpmyadmin/config.inc.php
-RUN mkdir -p /var/www
-RUN ln -s /usr/share/phpmyadmin /var/www/phpmyadmin
 RUN ln -s /etc/nginx/sites-available/phpmyadmin /etc/nginx/sites-enabled/phpmyadmin
 RUN rm /etc/nginx/sites-enabled/default
 

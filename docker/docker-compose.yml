@@ -4,24 +4,22 @@ services:
         build: ./application
         container_name: project_application
         volumes:
-            - /Users/robingodart/www:/var/www
+            - /Users/robingodart1/www:/var/www
         tty: true
-#    manager:
-#        build: ./manager
-#        container_name: manager
-#        volumes_from:
-#            - application
-#        ports:
-#            - 8081:8081
-#        links:
-#            - db:db
+    manager:
+        build: ./manager
+        container_name: manager
+        volumes_from:
+            - application
+        ports:
+            - 8081:8081
     db:
         image: mysql
         container_name: mysql
         env_file:
             - ./env/mysql.env
         volumes:
-            - /Users/robingodart/docker/mysql/data:/var/lib/mysql:rw
+            - /Users/robingodart1/docker/mysql/data:/var/lib/mysql:rw
         ports:
             - 3306:3306
     php:
@@ -32,8 +30,6 @@ services:
         ports:
             - 9000:9000
             - 9001:9001
-        links:
-            - db:db
     nginx:
         build: ./nginx
         container_name: nginx
@@ -42,9 +38,6 @@ services:
         volumes_from:
             - application
         volumes:
-            - /Users/robingodart/docker/logs/nginx:/var/log/nginx
+            - /Users/robingodart1/docker/logs/nginx:/var/log/nginx
         depends_on:
             - php
-        links:
-            - db:db
-            - php:php

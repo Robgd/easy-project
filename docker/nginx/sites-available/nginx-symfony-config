@@ -20,6 +20,8 @@ server {
       fastcgi_read_timeout 300;
       fastcgi_pass  php-upstream;
       include fastcgi_params;
+      fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+      fastcgi_param DOCUMENT_ROOT $realpath_root;
    }
 
    location ~ /\.ht {

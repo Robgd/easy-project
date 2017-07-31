@@ -22,11 +22,9 @@ RUN apt-get update && apt-get install -y \
 
 RUN phpdismod xdebug
 
-RUN sed -i "s@listen = /run/php/php7.0-fpm.sock@listen = 9000@" /etc/php/7.0/fpm/pool.d/www.conf \
-    && sed -i "s@user = www-data@user = docker@" /etc/php/7.0/fpm/pool.d/www.conf \
-    && sed -i "s@group = www-data@group = docker@" /etc/php/7.0/fpm/pool.d/www.conf
+RUN sed -i "s@listen = /run/php/php7.0-fpm.sock@listen = 9000@" /etc/php/7.0/fpm/pool.d/www.conf
 
-WORKDIR /var/www/$PROJECT_NAME
+WORKDIR /var/www
 COPY ./conf.d/30-robgd.ini /etc/php7.0/fpm/conf.d/30-robgd.ini
 
 COPY ./run.sh /root/run.sh

@@ -42,9 +42,49 @@ fi
 FRAMEWORK=$1
 PROJECT_NAME=$2
 
-case "$FRAMEWORK" in
+
+# @info:    do nginx configuration
+# @args:    project name
+nginxConfig()
+{
+    docker cp ./docker/nginx/sites-available/nginx-$1-config nginx:/etc/nginx/sites-enabled/${PROJECT_NAME}
+    docker exec -t -i nginx sed -i -e "s#{{PROJECT_NAME}}#$PROJECT_NAME#g" /etc/nginx/sites-enabled/${PROJECT_NAME}
+    docker exec -t -i nginx service nginx restart
+}
+
+addVHost()
+{
+sudo -s <<EOF
+echo "127.0.0.1    $PROJECT_NAME.dev" >> /etc/hosts
+EOF
+}
+
+installSymfony()
+{
+    nginxConfig "symfony"
+
+    default=$HOME/www
+    read -p "- Enter your website (${YELLOW}$default${COL_RESET}): " PROJECT_PATH
+    PROJECT_PATH=${PROJECT_PATH:-$default}
+
+    symfony new $PROJECT_PATH/$PROJECT_NAME
+
+    addVHost
+}
+
+installLaravel()
+{
+    echo 'test'
+}
+
+installWordpress()
+{
+    echo 'test'
+}
+
+case $FRAMEWORK in
     "symfony")
-        installSymfony()
+        installSymfony
         ;;
     "laravel")
         installLaravel
@@ -53,19 +93,6 @@ case "$FRAMEWORK" in
         installWordpress
         ;;
     *)
-        echoWarn 'Only these projects are supported (symfony, laravel, wordpress)'
+        echoWarn "Only these projects are supported (symfony, laravel, wordpress)"
         ;;
 esac
-
-# @info:    do nginx configuration
-# @args:    project name
-nginxConfig()
-{
-    docker cp ./docker/nginx/sites-available/nginx-$1-config nginx:/etc/nginx/site-enabled/${PROJECT_NAME}
-    docker exec -t -i nginx sed -i -e "s#{{DOCKER_PATH}}#$EASY_PROJECT_DOCKER_PATH#g" docker/docker-compose.yml
-}
-
-installSymfony()
-{
-    nginxConfig "symfony"
-}

@@ -25,9 +25,10 @@
 
 source ./color.sh
 
-nginxConfig()
-{
-    echo $1
-}
+PROJECT_NAME=blog
 
-nginxConfig "symfony"
+echo 'start non root'
+
+sudo -s <<EOF
+echo "127.0.0.1    $PROJECT_NAME.dev" >> /etc/hosts
+EOF

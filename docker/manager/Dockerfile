@@ -24,12 +24,5 @@ RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
 COPY ./conf.d/30-robgd.ini /etc/php7.0/cli/conf.d/30-robgd.ini
-COPY ./run.sh /root/run.sh
-RUN chmod 775 /root/*.sh
 
-WORKDIR /var/www/robgd
-
-# Define default command.
-CMD ["/root/run.sh"]
-
-EXPOSE 8081
+WORKDIR /var/www
